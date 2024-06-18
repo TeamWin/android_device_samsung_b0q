@@ -1,7 +1,7 @@
 # TWRP Device Tree for Samsung Galaxy S22 Ultra
 
 ## For Decryption
-Not Workig.
+Not Working.
 
 
 ## Clone repo

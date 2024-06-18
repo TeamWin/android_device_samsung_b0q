@@ -1,0 +1,27 @@
+on property:sys.listeners.registered=true
+    start keymint-default
+
+on property:vendor.sys.listeners.registered=true
+    start keymint-default
+
+on property:ro.crypto.type=block && property:ro.crypto.fs_crypto_blkdev=*
+    stop keymint-default
+
+on property:twrp.all.users.decrypted=true
+    stop keymint-default
+
+service keymint-default /system/bin/android.hardware.security.keymint-service
+    user root
+    group root
+    setenv LD_LIBRARY_PATH /vendor/lib64:/vendor/lib:/system/lib64:/system/lib:/sbin
+    disabled
+    seclabel u:r:recovery:s0
+
+on post-fs
+    mkdir /mnt/vendor/efs/DAK 0775 system system
+    restorecon -R /mnt/vendor/efs/DAK
+    chown system system /mnt/vendor/efs/DAK/gakkeybox
+    chmod 0644 /mnt/vendor/efs/DAK/gakkeybox
+
+on post-fs-data
+    mkdir /data/vendor/keymaster 0775 system system
